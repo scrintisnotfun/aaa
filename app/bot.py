@@ -7,7 +7,7 @@ import threading
 import requests
 
 DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
-CHANNEL_ID = int(os.environ.get("CHANNEL_ID", 1400497545532276746))
+CHANNEL_ID = int(os.environ.get("CHANNEL_ID", 1401663245936365699))
 
 pet_servers = []
 
