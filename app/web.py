@@ -3,7 +3,7 @@ from app.bot import get_recent_pets
 
 app = Flask(__name__)
 
-HTML_DARK_PAGE = """
+HTML_NEXUS_STYLE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,81 +11,120 @@ HTML_DARK_PAGE = """
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Pet Tracker</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
   body {
-    margin: 0; 
-    background: #121212; 
-    color: #e63946; 
-    font-family: 'Orbitron', monospace, sans-serif; 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 100vh; 
-    align-items: center; 
+    margin: 0;
+    height: 100vh;
+    background-color: #0a0a0a;
+    color: #ddd;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
     justify-content: center;
-    overflow-x: hidden;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 0 1rem;
   }
+
   h1 {
-    font-size: 4rem;
-    background: linear-gradient(90deg, #e63946, #fca311, #e63946);
-    background-size: 200% 200%;
-    animation: gradientMove 3s ease infinite;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow:
-      0 0 5px #e63946,
-      0 0 10px #fca311;
-    margin-bottom: 0.5rem;
+    font-weight: 900;
+    font-size: 5rem;
+    margin: 0;
   }
-  @keyframes gradientMove {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+
+  .red {
+    color: #e63946;
   }
+
+  h1 .white {
+    color: white;
+  }
+
   p {
-    font-size: 1.25rem;
-    text-align: center;
-    max-width: 600px;
-    color: #aaa;
-    text-shadow: 0 0 5px #660000;
+    font-weight: 400;
+    font-size: 1.5rem;
+    max-width: 700px;
+    margin: 1rem auto 3rem auto;
+    color: #bbb;
   }
-  footer {
-    margin-top: auto;
-    padding: 1rem;
-    font-size: 0.9rem;
-    color: #770000;
-    text-align: center;
+
+  p .highlight {
+    color: #e63946;
+    font-weight: 600;
   }
-  /* subtle animated background effect */
-  body::before {
-    content: "";
-    position: fixed;
-    top: -20%;
-    left: -20%;
-    width: 140vw;
-    height: 140vh;
-    background: radial-gradient(circle at center, #3a0e0e, transparent 60%);
-    opacity: 0.15;
-    animation: pulse 5s ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: -1;
+
+  .btn-container {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  @keyframes pulse {
-    0% {opacity: 0.1;}
-    100% {opacity: 0.25;}
+
+  a.btn {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.125rem;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  a.btn-primary {
+    background-color: #e63946;
+    color: white;
+    border: none;
+  }
+
+  a.btn-primary:hover {
+    background-color: #b32b33;
+  }
+
+  a.btn-outline {
+    border: 2.5px solid #e63946;
+    color: #e63946;
+    background: transparent;
+  }
+
+  a.btn-outline:hover {
+    background-color: #e63946;
+    color: white;
+  }
+
+  /* Optional icons (you can replace with your own or font icons) */
+  .icon-code::before {
+    content: "</>";
+    font-weight: 700;
+    font-family: monospace;
+  }
+
+  .icon-gateway::before {
+    content: "\\1F6A7"; /* construction cone emoji */
   }
 </style>
 </head>
 <body>
-  <h1>Pet Tracker</h1>
-  <p>Tracking your pets in real-time with a sleek dark and red theme.</p>
-  <footer>© 2025 Your Bot</footer>
+  <h1>
+    <span class="red">PET</span><span class="white">TRACKER</span>
+  </h1>
+  <p>
+    The ultimate platform for <span class="highlight">real-time monitoring</span>, <span class="highlight">server updates</span>, and <span class="highlight">community engagement</span>.
+  </p>
+  <div class="btn-container">
+    <a href="/recent-pets" class="btn btn-primary icon-code">Recent Pets</a>
+    <a href="/ping" class="btn btn-outline icon-gateway">Ping Service</a>
+  </div>
 </body>
 </html>
 """
 
 @app.route("/")
 def home():
-    return render_template_string(HTML_DARK_PAGE)
+    return render_template_string(HTML_NEXUS_STYLE)
 
 @app.route("/recent-pets")
 def recent():
