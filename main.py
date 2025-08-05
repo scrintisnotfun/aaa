@@ -8,6 +8,7 @@ def ping_site():
     while True:
         try:
             requests.get("https://ere-dv2x.onrender.com/recent-pets")
+            requests.get("https://aaa-l8lt.onrender.com/recent-pets")
         except Exception as e:
             print(f"Ping failed: {e}")
         time.sleep(600)  # Ping every 10 minutes (600 seconds)
