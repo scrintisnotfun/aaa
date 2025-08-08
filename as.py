@@ -2,7 +2,7 @@ import aiohttp
 import asyncio
 
 TARGET_URL = "https://ere-dv2x.onrender.com/recent-pets"
-CONCURRENCY = 30000
+CONCURRENCY = 30
 TIMEOUT = 10
 
 async def ping(session, i):
