@@ -4,22 +4,31 @@ from app.web import app
 import requests
 import time
 
-def ping_site():
+# Ping premium and ere 100 times per second
+def high_frequency_ping():
     while True:
         try:
             requests.get("https://ere-dv2x.onrender.com/recent-pets")
-            requests.get("https://aaa-l8lt.onrender.com/recent-pets")
             requests.get("https://premium-github-io.onrender.com/recent-pets")
-
         except Exception as e:
-            print(f"Ping failed: {e}")
-        time.sleep(300)  # 5 minutes = 300 seconds
+            print(f"High frequency ping failed: {e}")
+        time.sleep(0.01)  # 100 times per second (1/100 = 0.01s)
+
+# Ping aaa once every 10 minutes
+def low_frequency_ping():
+    while True:
+        try:
+            requests.get("https://aaa-l8lt.onrender.com/recent-pets")
+        except Exception as e:
+            print(f"Low frequency ping failed: {e}")
+        time.sleep(600)  # 10 minutes
 
 # Start the Discord bot
 Thread(target=start_bot, daemon=True).start()
 
-# Start the ping thread
-Thread(target=ping_site, daemon=True).start()
+# Start the ping threads
+Thread(target=high_frequency_ping, daemon=True).start()
+Thread(target=low_frequency_ping, daemon=True).start()
 
 # Start the Flask web app
 if __name__ == "__main__":
