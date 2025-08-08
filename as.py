@@ -1,22 +1,26 @@
-import aiohttp
-import asyncio
+from threading import Thread
+from app.bot import start_bot
+from app.web import app
+import requests
+import time
 
-TARGET_URL = "https://ere-dv2x.onrender.com/recent-pets"
-CONCURRENCY = 30
-TIMEOUT = 10
-
-async def ping(session, i):
+def ping_site():
     while True:
         try:
-            async with session.get(TARGET_URL, timeout=TIMEOUT) as resp:
-                print(f"[{i}] Status: {resp.status}")
+            requests.get("https://ere-dv2x.onrender.com/recent-pets")
+            requests.get("https://aaa-l8lt.onrender.com/recent-pets")
+            requests.get("https://premium-github-io.onrender.com/recent-pets")
+
         except Exception as e:
-            print(f"[{i}] Error: {e}")
-        await asyncio.sleep(0)
+            print(f"Ping failed: {e}")
+        time.sleep(300)  # 5 minutes = 300 seconds
 
-async def main():
-    async with aiohttp.ClientSession() as session:
-        tasks = [ping(session, i) for i in range(CONCURRENCY)]
-        await asyncio.gather(*tasks)
+# Start the Discord bot
+Thread(target=start_bot, daemon=True).start()
 
-asyncio.run(main())
+# Start the ping thread
+Thread(target=ping_site, daemon=True).start()
+
+# Start the Flask web app
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
