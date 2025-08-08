@@ -12,16 +12,9 @@ def high_frequency_ping():
             requests.get("https://premium-github-io.onrender.com/recent-pets")
         except Exception as e:
             print(f"High frequency ping failed: {e}")
-        time.sleep(0.01)  # 100 times per second (1/100 = 0.01s)
+        time.sleep(0.002)  # 100 times per second (1/100 = 0.01s)
 
-# Ping aaa once every 10 minutes
-def low_frequency_ping():
-    while True:
-        try:
-            requests.get("https://aaa-l8lt.onrender.com/recent-pets")
-        except Exception as e:
-            print(f"Low frequency ping failed: {e}")
-        time.sleep(600)  # 10 minutes
+
 
 # Start the Discord bot
 Thread(target=start_bot, daemon=True).start()
@@ -32,4 +25,4 @@ Thread(target=low_frequency_ping, daemon=True).start()
 
 # Start the Flask web app
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=8000)
