@@ -1,33 +1,29 @@
-from threading import Thread
-from app.bot import start_bot
-from app.web import app
-import requests
+import asyncio
+import aiohttp
 
-# Your actual ping targets
 TARGETS = [
     "https://ere-dv2x.onrender.com/recent-pets",
     "https://premium-github-io.onrender.com/recent-pets"
 ]
 
-CONCURRENCY = 1000
-TIMEOUT = 30  # seconds
+CONCURRENCY = 2500
+TIMEOUT = 30
 
-def ping_site_continuous(url, thread_index):
+async def ping(session, url, index):
     while True:
         try:
-            response = requests.get(url, timeout=TIMEOUT)
-            print(f"[Thread {thread_index}] Pinged {url} with status {response.status_code}")
+            async with session.get(url, timeout=TIMEOUT) as resp:
+                print(f"[{index}] {url} -> {resp.status}")
         except Exception as e:
-            print(f"[Thread {thread_index}] Error pinging {url}: {e}")
+            print(f"[{index}] {url} -> ERROR: {e}")
+        await asyncio.sleep(0)  # Allow cooperative multitasking
 
-# Start Discord bot
-Thread(target=start_bot, daemon=True).start()
+async def main():
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for url in TARGETS:
+            for i in range(CONCURRENCY):
+                tasks.append(ping(session, url, i))
+        await asyncio.gather(*tasks)
 
-# Start ping threads
-for url in TARGETS:
-    for i in range(CONCURRENCY):
-        Thread(target=ping_site_continuous, args=(url, i), daemon=True).start()
-
-# Start Flask web app
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+asyncio.run(main())
